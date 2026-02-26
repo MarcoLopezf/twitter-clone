@@ -82,6 +82,7 @@ docs(api): add Swagger documentation for auth endpoints
 - **Tests travel with the feature** — committed in the same commit, never at the end
 - **No squash** — full history must remain visible at all times
 - **No vague messages** — never: "fix stuff", "WIP", "updates", "misc", "changes"
+- **No Co-Authored-By** — never add `Co-Authored-By` trailers to commits
 
 ---
 
