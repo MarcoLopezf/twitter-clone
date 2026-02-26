@@ -3,60 +3,257 @@ openapi: 3.0.1
 info:
   title: The Flock API
   version: v1
-  description: Twitter clone API documentation
-paths:
-  "/api/v1/auth/register":
-    post:
-      summary: Register a new user
-      tags:
-      - Auth
-      parameters: []
-      responses:
-        '201':
-          description: user registered
-        '422':
-          description: validation failed
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: string
-        required: true
-  "/api/v1/auth/login":
-    post:
-      summary: Login with email and password
-      tags:
-      - Auth
-      parameters: []
-      responses:
-        '200':
-          description: login successful
-        '401':
-          description: invalid credentials
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: string
-        required: true
-  "/api/v1/auth/me":
-    get:
-      summary: Return the authenticated user
-      tags:
-      - Auth
-      security:
-      - bearer_auth: []
-      responses:
-        '200':
-          description: authenticated
-        '401':
-          description: unauthenticated
+  description: Twitter clone API — all endpoints under /api/v1/
 servers:
-- url: http://localhost:3000
-  description: Local development
+  - url: http://localhost:3000
+    description: Local development
 components:
   securitySchemes:
     bearer_auth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    UserObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        email:
+          type: string
+          example: docuser@example.com
+        username:
+          type: string
+          example: docuser
+        display_name:
+          type: string
+          example: Doc User
+        bio:
+          type: string
+          nullable: true
+          example: null
+        avatar_url:
+          type: string
+          nullable: true
+          example: null
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-02-26T19:41:16.797Z"
+    AuthSuccess:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3NzIyMjEyNzZ9.a4c07eRJsabE079cOwjCAMCzzn8YIhLGFzLzozSok68
+            user:
+              $ref: '#/components/schemas/UserObject'
+    MeSuccess:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/UserObject'
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Registration failed
+        details:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          example:
+            email:
+              - has already been taken
+            username:
+              - has already been taken
+    UnauthorizedError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Invalid email or password
+paths:
+  "/api/v1/auth/register":
+    post:
+      summary: Register a new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - username
+                - password
+              properties:
+                email:
+                  type: string
+                  description: User email address
+                  example: docuser@example.com
+                username:
+                  type: string
+                  description: Unique username (3–30 characters)
+                  example: docuser
+                display_name:
+                  type: string
+                  description: Display name shown on profile
+                  example: Doc User
+                password:
+                  type: string
+                  description: Account password
+                  example: Password1!
+                bio:
+                  type: string
+                  description: Short biography (max 160 characters)
+                  example: Hello world
+                avatar_url:
+                  type: string
+                  description: URL to profile avatar image
+                  example: https://example.com/avatar.png
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccess'
+              example:
+                data:
+                  token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3NzIyMjEyNzZ9.a4c07eRJsabE079cOwjCAMCzzn8YIhLGFzLzozSok68
+                  user:
+                    id: 2
+                    email: docuser@example.com
+                    username: docuser
+                    display_name: Doc User
+                    bio: null
+                    avatar_url: null
+                    created_at: "2026-02-26T19:41:16.797Z"
+        '422':
+          description: Validation failed — duplicate email/username or missing required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              examples:
+                duplicate_email_and_username:
+                  summary: Duplicate email and username
+                  value:
+                    error: Registration failed
+                    details:
+                      email:
+                        - has already been taken
+                      username:
+                        - has already been taken
+                missing_email:
+                  summary: Missing email
+                  value:
+                    error: Registration failed
+                    details:
+                      email:
+                        - "can't be blank"
+                        - is invalid
+
+  "/api/v1/auth/login":
+    post:
+      summary: Login with email and password
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  description: Registered email address
+                  example: docuser@example.com
+                password:
+                  type: string
+                  description: Account password
+                  example: Password1!
+      responses:
+        '200':
+          description: Login successful — returns JWT token and user data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSuccess'
+              example:
+                data:
+                  token: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjE3NzIyMjEyNzd9.-b56Pni0EWHQdb6tnxMskdaa3AL3L9eKBzBGBP7f5DM
+                  user:
+                    id: 2
+                    email: docuser@example.com
+                    username: docuser
+                    display_name: Doc User
+                    bio: null
+                    avatar_url: null
+                    created_at: "2026-02-26T19:41:16.797Z"
+        '401':
+          description: Invalid credentials — wrong password or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+              example:
+                error: Invalid email or password
+
+  "/api/v1/auth/me":
+    get:
+      summary: Return the authenticated user
+      tags:
+        - Auth
+      security:
+        - bearer_auth: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: "JWT token — format: Bearer <token>"
+          example: "Bearer eyJhbGciOiJIUzI1NiJ9..."
+      responses:
+        '200':
+          description: Returns the current authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeSuccess'
+              example:
+                data:
+                  user:
+                    id: 2
+                    email: docuser@example.com
+                    username: docuser
+                    display_name: Doc User
+                    bio: null
+                    avatar_url: null
+                    created_at: "2026-02-26T19:41:16.797Z"
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+              example:
+                error: Unauthorized
