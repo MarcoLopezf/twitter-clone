@@ -30,7 +30,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./backend:/app
+      - ./backend:/rails
       - backend_gems:/usr/local/bundle
 
   frontend:
