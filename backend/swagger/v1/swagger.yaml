@@ -1,0 +1,62 @@
+---
+openapi: 3.0.1
+info:
+  title: The Flock API
+  version: v1
+  description: Twitter clone API documentation
+paths:
+  "/api/v1/auth/register":
+    post:
+      summary: Register a new user
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '201':
+          description: user registered
+        '422':
+          description: validation failed
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+        required: true
+  "/api/v1/auth/login":
+    post:
+      summary: Login with email and password
+      tags:
+      - Auth
+      parameters: []
+      responses:
+        '200':
+          description: login successful
+        '401':
+          description: invalid credentials
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: string
+        required: true
+  "/api/v1/auth/me":
+    get:
+      summary: Return the authenticated user
+      tags:
+      - Auth
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: authenticated
+        '401':
+          description: unauthenticated
+servers:
+- url: http://localhost:3000
+  description: Local development
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
