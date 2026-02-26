@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
+  has_many :tweets, dependent: :destroy
+
   EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/
 
   validates :email, presence: true,
