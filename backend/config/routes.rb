@@ -15,6 +15,15 @@ Rails.application.routes.draw do
           get :timeline
         end
       end
+
+      resources :users, only: [], controller: "follows" do
+        member do
+          post   :follow
+          delete :unfollow
+          get    :followers
+          get    :following
+        end
+      end
     end
   end
 end

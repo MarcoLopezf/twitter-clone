@@ -8,6 +8,8 @@ class Follow < ApplicationRecord
   private
 
   def cannot_follow_self
+    return unless follower_id.present? && followed_id.present?
+
     errors.add(:follower_id, "cannot follow yourself") if follower_id == followed_id
   end
 end

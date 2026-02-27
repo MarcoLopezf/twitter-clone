@@ -18,6 +18,18 @@ class User < ApplicationRecord
                        length: { minimum: 3, maximum: 30 }
   validates :bio, length: { maximum: 160 }, allow_blank: true
 
+  def following?(user)
+    following.exists?(user.id)
+  end
+
+  def followers_count
+    followers.count
+  end
+
+  def following_count
+    following.count
+  end
+
   def generate_jwt
     payload = { user_id: id, exp: 24.hours.from_now.to_i }
     JWT.encode(payload, Rails.application.secret_key_base, "HS256")
