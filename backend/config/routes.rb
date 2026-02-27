@@ -9,6 +9,12 @@ Rails.application.routes.draw do
       post "auth/register", to: "auth#register"
       post "auth/login",    to: "auth#login"
       get  "auth/me",       to: "auth#me"
+
+      resources :tweets, only: %i[create destroy] do
+        collection do
+          get :timeline
+        end
+      end
     end
   end
 end
