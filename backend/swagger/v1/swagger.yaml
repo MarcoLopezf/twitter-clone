@@ -316,6 +316,104 @@ paths:
                   error:
                     type: string
                     example: Unauthorized
+  "/api/v1/tweets/{id}/like":
+    post:
+      summary: Like a tweet
+      tags:
+      - Likes
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the tweet to like
+        schema:
+          type: integer
+      responses:
+        '201':
+          description: like created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      user_id:
+                        type: integer
+                        example: 7
+                      tweet_id:
+                        type: integer
+                        example: 3
+                      created_at:
+                        type: string
+                        example: '2026-02-27T21:07:21.891Z'
+        '422':
+          description: already liked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Validation failed
+                  details:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          description: unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
+  "/api/v1/tweets/{id}/unlike":
+    delete:
+      summary: Unlike a tweet
+      tags:
+      - Likes
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the tweet to unlike
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: unliked successfully
+        '422':
+          description: not liked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Not liked
+        '401':
+          description: unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Unauthorized
   "/api/v1/tweets":
     post:
       summary: Create a tweet

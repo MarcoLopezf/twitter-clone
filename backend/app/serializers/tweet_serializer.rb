@@ -12,11 +12,13 @@ class TweetSerializer
     }
   end
 
-  attribute :likes_count do |_tweet|
-    0
+  attribute :likes_count do |tweet|
+    tweet.likes_count
   end
 
-  attribute :liked_by_current_user do |_tweet, params|
-    params[:current_user].present? ? false : false
+  attribute :liked_by_current_user do |tweet, params|
+    next false unless params[:current_user]
+
+    tweet.liked_by?(params[:current_user])
   end
 end
