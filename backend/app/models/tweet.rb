@@ -1,4 +1,6 @@
 class Tweet < ApplicationRecord
+  include Likeable
+
   belongs_to :user
 
   validates :content, presence: true, length: { maximum: 280 }

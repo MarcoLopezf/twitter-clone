@@ -10,9 +10,22 @@ Rails.application.routes.draw do
       post "auth/login",    to: "auth#login"
       get  "auth/me",       to: "auth#me"
 
-      resources :tweets, only: %i[create destroy] do
+      resources :tweets, only: %i[create destroy], controller: "tweets" do
         collection do
           get :timeline
+        end
+        member do
+          post   :like,   controller: "likes"
+          delete :unlike, controller: "likes"
+        end
+      end
+
+      resources :users, only: [], controller: "follows" do
+        member do
+          post   :follow
+          delete :unfollow
+          get    :followers
+          get    :following
         end
       end
     end
