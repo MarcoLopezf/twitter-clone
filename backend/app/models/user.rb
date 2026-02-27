@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Searchable
+
   has_secure_password
 
   has_many :tweets, dependent: :destroy
@@ -19,6 +21,10 @@ class User < ApplicationRecord
                        uniqueness: { case_sensitive: false },
                        length: { minimum: 3, maximum: 30 }
   validates :bio, length: { maximum: 160 }, allow_blank: true
+
+  def tweet_count
+    tweets.count
+  end
 
   def following?(user)
     following.exists?(user.id)

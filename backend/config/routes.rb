@@ -20,6 +20,10 @@ Rails.application.routes.draw do
         end
       end
 
+      get   "users/search",      to: "users#search"
+      patch "users/me",          to: "users#update"
+      get   "users/:username",   to: "users#show", constraints: { username: /[^\/]+/ }, format: false
+
       resources :users, only: [], controller: "follows" do
         member do
           post   :follow
