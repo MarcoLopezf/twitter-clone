@@ -33,6 +33,6 @@ export async function login(payload: LoginPayload): Promise<AuthResponse> {
 }
 
 export async function getMe(): Promise<User> {
-  const response = await api.get<{ data: User }>('/api/v1/auth/me')
-  return response.data.data
+  const response = await api.get<{ data: { user: User } }>('/api/v1/auth/me')
+  return response.data.data.user
 }

@@ -1,7 +1,7 @@
 interface AvatarProps {
   avatarUrl?: string | null
   displayName?: string | null
-  username: string
+  username?: string
   size?: 'sm' | 'md' | 'lg'
 }
 
@@ -11,8 +11,8 @@ const SIZE_CLASSES = {
   lg: 'h-14 w-14 text-base',
 }
 
-function getInitials(displayName: string | null | undefined, username: string): string {
-  const name = displayName ?? username
+function getInitials(displayName: string | null | undefined, username: string | undefined): string {
+  const name = displayName ?? username ?? '?'
   return name.slice(0, 2).toUpperCase()
 }
 
@@ -23,7 +23,7 @@ export function Avatar({ avatarUrl, displayName, username, size = 'md' }: Avatar
     return (
       <img
         src={avatarUrl}
-        alt={displayName ?? username}
+        alt={displayName ?? username ?? ''}
         className={`${sizeClass} rounded-full object-cover ring-1 ring-zinc-200 dark:ring-zinc-700`}
       />
     )

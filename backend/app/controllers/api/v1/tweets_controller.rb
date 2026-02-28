@@ -31,7 +31,17 @@ module Api
 
         render json: {
           data: serialize_tweets(paginated_tweets),
-          meta: { total: pagy.count, page: pagy.page }
+          meta: { total: pagy.count, page: pagy.page, next_page: pagy.next }
+        }, status: :ok
+      end
+
+      def user_tweets
+        user = User.find_by!(username: params[:username])
+        pagy, paginated_tweets = pagy(user.tweets.order(created_at: :desc))
+
+        render json: {
+          data: serialize_tweets(paginated_tweets),
+          meta: { total: pagy.count, page: pagy.page, next_page: pagy.next }
         }, status: :ok
       end
 
