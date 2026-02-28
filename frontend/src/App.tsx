@@ -5,6 +5,7 @@ import { useAuth } from './hooks/useAuth'
 import { LoadingSpinner } from './components/common/LoadingSpinner'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { ProfilePage } from './pages/ProfilePage'
 
 const queryClient = new QueryClient()
 
@@ -63,7 +64,7 @@ function AppRoutes() {
         path="/profile/:username"
         element={
           <ProtectedRoute>
-            <div className="p-4 text-zinc-900 dark:text-zinc-100">Profile — coming soon</div>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />
