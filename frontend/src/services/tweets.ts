@@ -24,3 +24,10 @@ export async function likeTweet(id: number): Promise<void> {
 export async function unlikeTweet(id: number): Promise<void> {
   await api.delete(`/api/v1/tweets/${id}/unlike`)
 }
+
+export async function getUserTweets(username: string, page = 1): Promise<PaginatedResponse<Tweet>> {
+  const response = await api.get<PaginatedResponse<Tweet>>(`/api/v1/users/${username}/tweets`, {
+    params: { page },
+  })
+  return response.data
+}
