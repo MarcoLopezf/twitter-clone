@@ -20,7 +20,8 @@ Rails.application.routes.draw do
         end
       end
 
-      get   "users/search",      to: "users#search"
+      get   "users/:username/tweets", to: "tweets#user_tweets"
+      get   "users/search",          to: "users#search"
       patch "users/me",          to: "users#update"
       get   "users/:username",   to: "users#show", constraints: { username: /[^\/]+/ }, format: false
 
