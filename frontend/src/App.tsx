@@ -2,9 +2,11 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from './context/AuthContext'
 import { useAuth } from './hooks/useAuth'
+import { Layout } from './components/common/Layout'
 import { LoadingSpinner } from './components/common/LoadingSpinner'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
+import { TimelinePage } from './pages/TimelinePage'
 import { ProfilePage } from './pages/ProfilePage'
 import { SearchPage } from './pages/SearchPage'
 
@@ -57,7 +59,9 @@ function AppRoutes() {
         path="/timeline"
         element={
           <ProtectedRoute>
-            <div className="p-4 text-zinc-900 dark:text-zinc-100">Timeline — coming soon</div>
+            <Layout>
+              <TimelinePage />
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -65,7 +69,9 @@ function AppRoutes() {
         path="/profile/:username"
         element={
           <ProtectedRoute>
-            <ProfilePage />
+            <Layout>
+              <ProfilePage />
+            </Layout>
           </ProtectedRoute>
         }
       />
@@ -73,7 +79,9 @@ function AppRoutes() {
         path="/search"
         element={
           <ProtectedRoute>
-            <SearchPage />
+            <Layout>
+              <SearchPage />
+            </Layout>
           </ProtectedRoute>
         }
       />
