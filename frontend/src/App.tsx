@@ -6,6 +6,7 @@ import { LoadingSpinner } from './components/common/LoadingSpinner'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { SearchPage } from './pages/SearchPage'
 
 const queryClient = new QueryClient()
 
@@ -72,7 +73,7 @@ function AppRoutes() {
         path="/search"
         element={
           <ProtectedRoute>
-            <div className="p-4 text-zinc-900 dark:text-zinc-100">Search — coming soon</div>
+            <SearchPage />
           </ProtectedRoute>
         }
       />
