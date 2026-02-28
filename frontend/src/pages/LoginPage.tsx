@@ -31,12 +31,32 @@ export function LoginPage() {
     }
   }
 
+  function fillDemoCredentials() {
+    setEmail('demo@theflock.com')
+    setPassword('demo1234')
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 dark:bg-zinc-950">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm dark:bg-zinc-900 md:p-8">
         <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
           Sign in to Flock
         </h1>
+
+        <div className="mb-4 rounded-lg border border-sky-200 bg-sky-50 px-3 py-2 dark:border-sky-800 dark:bg-sky-900/20">
+          <p className="text-xs font-medium text-sky-700 dark:text-sky-400">Demo account</p>
+          <p className="text-xs text-sky-600 dark:text-sky-500">
+            <span className="font-mono">demo@theflock.com</span> /{' '}
+            <span className="font-mono">demo1234</span>
+          </p>
+          <button
+            type="button"
+            onClick={fillDemoCredentials}
+            className="mt-1 text-xs font-medium text-sky-600 hover:underline dark:text-sky-400"
+          >
+            Fill in automatically →
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Input
