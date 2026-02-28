@@ -32,7 +32,7 @@ SEED_USERS = [
   { username: "greta_rx",      display_name: "Greta Andersen",   bio: "Rails, React, running. In that order." },
   { username: "hector_dev",    display_name: "Héctor Romero",    bio: "Open source contributor. DMs open." },
   { username: "ines_io",       display_name: "Inès Dupont",      bio: "TypeScript nerd. Strict mode only." },
-  { username: "juan_backend",  display_name: "Juan Villarreal",  bio: "PostgreSQL whisperer. Indexing everything." },
+  { username: "juan_backend",  display_name: "Juan Villarreal",  bio: "PostgreSQL whisperer. Indexing everything." }
 ].freeze
 
 regular_users = SEED_USERS.map do |attrs|
@@ -47,7 +47,7 @@ regular_users = SEED_USERS.map do |attrs|
   user
 end
 
-all_users = [demo_user] + regular_users
+all_users = [ demo_user ] + regular_users
 
 # ---------------------------------------------------------------------------
 # Tweets
@@ -74,7 +74,7 @@ TWEET_TEMPLATES = [
   "Just remembered I never removed those debug puts statements. Deploying anyway.",
   "The docs lied. Stack Overflow saved me. Classic.",
   "Coffee → code → repeat. This is the loop I live in.",
-  "Typed the same variable name wrong three times in a row. I'm fine.",
+  "Typed the same variable name wrong three times in a row. I'm fine."
 ].freeze
 
 LANGUAGES = %w[Ruby Rails TypeScript React PostgreSQL Elixir Go Rust].freeze
@@ -118,7 +118,7 @@ end
 puts "\n→ Ensuring demo user has at least 5 followers..."
 
 current_follower_count = demo_user.followers.count
-needed                 = [0, 5 - current_follower_count].max
+needed                 = [ 0, 5 - current_follower_count ].max
 
 if needed > 0
   candidates = regular_users.reject { |u| u.following?(demo_user) }

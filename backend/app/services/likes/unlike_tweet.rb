@@ -12,7 +12,7 @@ module Likes
         like.destroy
         { success: true }
       else
-        { success: false, errors: ["Not liked"] }
+        { success: false, errors: [ "Not liked" ] }
       end
     end
   end

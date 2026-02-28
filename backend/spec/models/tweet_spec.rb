@@ -21,7 +21,7 @@ RSpec.describe Tweet, type: :model do
         older_tweet = create(:tweet, created_at: 2.hours.ago)
         newer_tweet = create(:tweet, created_at: 1.hour.ago)
 
-        expect(Tweet.recent).to eq([newer_tweet, older_tweet])
+        expect(Tweet.recent).to eq([ newer_tweet, older_tweet ])
       end
     end
 
@@ -35,9 +35,9 @@ RSpec.describe Tweet, type: :model do
         newer_tweet = create(:tweet, user: user_b, created_at: 1.hour.ago)
         _excluded_tweet = create(:tweet, user: other_user)
 
-        result = Tweet.by_users([user_a.id, user_b.id])
+        result = Tweet.by_users([ user_a.id, user_b.id ])
 
-        expect(result).to eq([newer_tweet, older_tweet])
+        expect(result).to eq([ newer_tweet, older_tweet ])
       end
 
       it "returns an ActiveRecord::Relation" do

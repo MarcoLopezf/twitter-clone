@@ -6,7 +6,7 @@ module Tweets
 
     def call
       followed_ids = @user.following.pluck(:id)
-      visible_ids  = followed_ids + [@user.id]
+      visible_ids  = followed_ids + [ @user.id ]
 
       Tweet.by_users(visible_ids)
     end

@@ -6,11 +6,11 @@ RSpec.describe "Api::V1::Tweets", type: :request do
       tags "Tweets"
       consumes "application/json"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :body, in: :body, schema: {
         type: :object,
-        required: ["content"],
+        required: [ "content" ],
         properties: {
           content: { type: :string, example: "Hello from the Flock API!" }
         }
@@ -45,7 +45,7 @@ RSpec.describe "Api::V1::Tweets", type: :request do
     delete "Delete a tweet" do
       tags "Tweets"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true
 
@@ -82,7 +82,7 @@ RSpec.describe "Api::V1::Tweets", type: :request do
     get "Get paginated timeline" do
       tags "Tweets"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :page, in: :query, type: :integer, required: false,
                 description: "Page number (default: 1)"

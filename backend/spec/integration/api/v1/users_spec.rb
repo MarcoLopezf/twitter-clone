@@ -34,7 +34,7 @@ RSpec.describe "Api::V1::Users", type: :request do
     get "Get a user's public profile" do
       tags "Users"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :username, in: :path, type: :string, required: true,
                 description: "Username of the user"
@@ -83,7 +83,7 @@ RSpec.describe "Api::V1::Users", type: :request do
       tags "Users"
       consumes "application/x-www-form-urlencoded"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :display_name, in: :formData, type: :string, required: false,
                 description: "New display name"
@@ -136,7 +136,7 @@ RSpec.describe "Api::V1::Users", type: :request do
     get "Search users by username or display name" do
       tags "Users"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :q, in: :query, type: :string, required: false,
                 description: "Search term (username or display name)"

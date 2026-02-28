@@ -5,7 +5,7 @@ RSpec.describe "Api::V1::Follows", type: :request do
     post "Follow a user" do
       tags "Follows"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true,
                 description: "ID of the user to follow"
@@ -81,7 +81,7 @@ RSpec.describe "Api::V1::Follows", type: :request do
     delete "Unfollow a user" do
       tags "Follows"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true,
                 description: "ID of the user to unfollow"
@@ -129,7 +129,7 @@ RSpec.describe "Api::V1::Follows", type: :request do
     get "List followers of a user" do
       tags "Follows"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true,
                 description: "ID of the user whose followers to list"
@@ -191,7 +191,7 @@ RSpec.describe "Api::V1::Follows", type: :request do
     get "List users followed by a user" do
       tags "Follows"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true,
                 description: "ID of the user whose following list to retrieve"
