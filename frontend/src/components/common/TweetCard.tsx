@@ -4,6 +4,9 @@ import type { Tweet } from '../../types'
 
 interface TweetCardProps {
   tweet: Tweet
+  onLike?: (id: number, liked: boolean) => void
+  onDelete?: (id: number) => void
+  currentUserId?: number
 }
 
 function formatRelativeTime(dateString: string): string {
@@ -17,9 +20,11 @@ function formatRelativeTime(dateString: string): string {
   return `${days}d`
 }
 
-export function TweetCard({ tweet }: TweetCardProps) {
+export function TweetCard({ tweet, onLike, onDelete, currentUserId }: TweetCardProps) {
+  const isOwn = currentUserId === tweet.user.id
+
   return (
-    <article className="flex gap-3 border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
+    <article className="group flex gap-3 border-b border-zinc-100 px-4 py-4 transition-colors hover:bg-zinc-50/60 dark:border-zinc-800/70 dark:hover:bg-zinc-900/40">
       <Link to={`/profile/${tweet.user.username}`} className="shrink-0">
         <Avatar
           avatarUrl={tweet.user.avatar_url}
@@ -28,28 +33,63 @@ export function TweetCard({ tweet }: TweetCardProps) {
           size="md"
         />
       </Link>
+
       <div className="min-w-0 flex-1">
-        <div className="flex items-baseline gap-1">
+        {/* Header */}
+        <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0">
           <Link
             to={`/profile/${tweet.user.username}`}
-            className="truncate text-sm font-semibold text-zinc-900 hover:underline dark:text-zinc-100"
+            className="text-[15px] font-bold text-zinc-900 hover:underline dark:text-zinc-100"
           >
             {tweet.user.display_name ?? tweet.user.username}
           </Link>
-          <span className="shrink-0 text-sm text-zinc-500 dark:text-zinc-400">
+          <span className="text-sm text-zinc-500 dark:text-zinc-400">
             @{tweet.user.username}
           </span>
-          <span className="shrink-0 text-sm text-zinc-400 dark:text-zinc-500">·</span>
-          <time className="shrink-0 text-sm text-zinc-400 dark:text-zinc-500">
+          <span className="text-sm text-zinc-300 dark:text-zinc-600">·</span>
+          <time className="text-sm text-zinc-400 dark:text-zinc-500">
             {formatRelativeTime(tweet.created_at)}
           </time>
         </div>
-        <p className="mt-1 whitespace-pre-wrap break-words text-sm text-zinc-800 dark:text-zinc-200">
+
+        {/* Content */}
+        <p className="mt-1.5 whitespace-pre-wrap break-words text-[15px] leading-relaxed text-zinc-800 dark:text-zinc-200">
           {tweet.content}
         </p>
-        <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
-          {tweet.likes_count} {tweet.likes_count === 1 ? 'like' : 'likes'}
-        </p>
+
+        {/* Actions */}
+        <div className="mt-3 flex items-center gap-5">
+          {onLike ? (
+            <button
+              onClick={() => onLike(tweet.id, tweet.liked_by_current_user)}
+              className={[
+                'group/like flex items-center gap-1.5 text-sm transition-colors',
+                tweet.liked_by_current_user
+                  ? 'text-rose-500 dark:text-rose-400'
+                  : 'text-zinc-400 hover:text-rose-500 dark:text-zinc-500 dark:hover:text-rose-400',
+              ].join(' ')}
+            >
+              <span className="text-base transition-transform group-hover/like:scale-125">
+                {tweet.liked_by_current_user ? '❤️' : '🤍'}
+              </span>
+              <span className="tabular-nums">{tweet.likes_count}</span>
+            </button>
+          ) : (
+            <span className="flex items-center gap-1.5 text-sm text-zinc-400 dark:text-zinc-500">
+              <span className="text-base">❤️</span>
+              <span className="tabular-nums">{tweet.likes_count}</span>
+            </span>
+          )}
+
+          {isOwn && onDelete && (
+            <button
+              onClick={() => onDelete(tweet.id)}
+              className="text-sm text-zinc-300 opacity-0 transition-all group-hover:opacity-100 hover:text-red-500 dark:text-zinc-600 dark:hover:text-red-400"
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </div>
     </article>
   )

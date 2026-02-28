@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Avatar } from '../components/common/Avatar'
 import { Button } from '../components/common/Button'
 import { Input } from '../components/common/Input'
@@ -9,7 +9,7 @@ import { TweetCard } from '../components/common/TweetCard'
 import { FollowButton } from '../components/users/FollowButton'
 import { useAuth } from '../hooks/useAuth'
 import { useUserProfile, useUpdateProfile } from '../hooks/useUser'
-import { getUserTweets } from '../services/tweets'
+import { getUserTweets, deleteTweet, likeTweet, unlikeTweet } from '../services/tweets'
 
 export function ProfilePage() {
   const { username } = useParams<{ username: string }>()
@@ -23,7 +23,19 @@ export function ProfilePage() {
     enabled: !!username,
   })
 
+  const queryClient = useQueryClient()
   const updateProfileMutation = useUpdateProfile(username!)
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deleteTweet(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tweets', 'user', username] }),
+  })
+
+  const likeMutation = useMutation({
+    mutationFn: ({ id, liked }: { id: number; liked: boolean }) =>
+      liked ? unlikeTweet(id) : likeTweet(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tweets', 'user', username] }),
+  })
 
   const [isEditing, setIsEditing] = useState(false)
   const [displayName, setDisplayName] = useState('')
@@ -177,7 +189,15 @@ export function ProfilePage() {
             No tweets yet.
           </p>
         ) : (
-          tweetsQuery.data?.data.map((tweet) => <TweetCard key={tweet.id} tweet={tweet} />)
+          tweetsQuery.data?.data.map((tweet) => (
+            <TweetCard
+              key={tweet.id}
+              tweet={tweet}
+              currentUserId={currentUser?.id}
+              onLike={(id, liked) => likeMutation.mutate({ id, liked })}
+              onDelete={(id) => deleteMutation.mutate(id)}
+            />
+          ))
         )}
       </div>
     </div>
