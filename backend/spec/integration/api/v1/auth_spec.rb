@@ -68,7 +68,7 @@ RSpec.describe "Api::V1::Auth", type: :request do
     get "Return the authenticated user" do
       tags "Auth"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       response "200", "authenticated" do
         let!(:user)         { create(:user) }

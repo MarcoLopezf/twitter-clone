@@ -5,7 +5,7 @@ RSpec.describe "Api::V1::Likes", type: :request do
     post "Like a tweet" do
       tags "Likes"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true,
                 description: "ID of the tweet to like"
@@ -67,7 +67,7 @@ RSpec.describe "Api::V1::Likes", type: :request do
     delete "Unlike a tweet" do
       tags "Likes"
       produces "application/json"
-      security [bearer_auth: []]
+      security [ bearer_auth: [] ]
 
       parameter name: :id, in: :path, type: :integer, required: true,
                 description: "ID of the tweet to unlike"
